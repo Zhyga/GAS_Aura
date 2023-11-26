@@ -2,10 +2,18 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interaction/HighlightInterface.h"
 
 AAuraPLayerController::AAuraPLayerController()
 {
-		bReplicates = true;
+	bReplicates = true;
+}
+
+void AAuraPLayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	CursorTrace();
 }
 
 void AAuraPLayerController::BeginPlay()
@@ -52,4 +60,36 @@ void AAuraPLayerController::Move(const FInputActionValue& InputActionValue)
 	}
 }
 
+void AAuraPLayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if(!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;
+	ThisActor = Cast<IHighlightInterface>(CursorHit.GetActor());
+	
+	if(LastActor == nullptr)
+	{
+		if(ThisActor != nullptr)
+		{
+			ThisActor->HighlightActor();
+		}
+	}
+	else
+	{
+		if(ThisActor == nullptr)
+		{
+			LastActor->UnHighlightActor();
+		}
+		else
+		{
+			if(LastActor != ThisActor)
+			{
+				LastActor->UnHighlightActor();
+				ThisActor->HighlightActor();
+			}
+		}
+	}
+}
 
