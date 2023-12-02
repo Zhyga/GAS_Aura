@@ -29,8 +29,8 @@ private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	IHighlightInterface* LastActor;
-	IHighlightInterface* ThisActor;
+	TObjectPtr<IHighlightInterface> LastActor;
+	TObjectPtr<IHighlightInterface> ThisActor;
 	
 	void Move(const FInputActionValue& InputActionValue);
 
