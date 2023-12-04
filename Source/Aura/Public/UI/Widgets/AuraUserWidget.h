@@ -20,7 +20,7 @@ protected:
 	void WidgetControllerSet();
 	
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetWidgetController(UObject* InWidgetController);
 	
 	UPROPERTY(BlueprintReadOnly)
